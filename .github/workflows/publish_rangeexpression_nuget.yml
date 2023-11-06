@@ -30,9 +30,6 @@ jobs:
       - name: Test
         run: dotnet test utilities.sln --no-restore --verbosity normal
           
-      # NuGet publish
-  publish-nuget:      
-    needs: build-and-test
       - name: Pack
         run: dotnet pack RangeExpression/RangeExpression.csproj --configuration Release --no-build --output ./nupkgs
         
