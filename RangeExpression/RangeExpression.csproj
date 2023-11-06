@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <Nullable>enable</Nullable>
+        <LangVersion>9.0</LangVersion>
+        <RootNamespace>Starter.Utilities</RootNamespace>
+        <Authors>Starter</Authors>
+        <Company>Starter</Company>
+        <RepositoryUrl>https://github.com/startergames/utilities</RepositoryUrl>
+        <RepositoryType>github</RepositoryType>
+    </PropertyGroup>
+
+</Project>

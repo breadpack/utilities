@@ -1,0 +1,45 @@
+name: Build and publish NuGet package
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'RangeExpression/RangeExpression.csproj'
+  workflow_dispatch: # This line allows manual triggering
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '7.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore utilities.sln
+
+      - name: Build
+        run: dotnet build utilities.sln --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test utilities.sln --no-restore --verbosity normal
+          
+      # NuGet publish
+  publish-nuget:      
+    needs: build-and-test
+      - name: Pack
+        run: dotnet pack RangeExpression/RangeExpression.csproj --configuration Release --no-build --output ./nupkgs
+        
+      - name: Add GitHub Source
+        run: dotnet nuget add source "https://nuget.pkg.github.com/startergames/index.json" --name "github" --username OWNER --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text
+
+      - name: Publish to GitHub Packages
+        run: dotnet nuget push ./nupkgs/*.nupkg --source "github" --skip-duplicate
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
