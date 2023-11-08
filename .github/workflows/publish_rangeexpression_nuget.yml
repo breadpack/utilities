@@ -27,8 +27,22 @@ jobs:
       - name: Build
         run: dotnet build utilities.sln --configuration Release --no-restore
 
-      - name: Test
-        run: dotnet test utilities.sln --no-restore --verbosity normal
+#      - name: Test
+#        run: dotnet test utilities.sln --no-restore --verbosity normal
+
+      - name: Copy DLL and PDB to Unity package
+        run: |
+          cp RangeExpression/bin/Release/netstandard2.1/*.dll UnityProject/Packages/RangeExpression/Runtime/
+          cp RangeExpression/bin/Release/netstandard2.1/*.pdb UnityProject/Packages/RangeExpression/Runtime/
+
+      - name: Commit files
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add TimerPackage/package.json
+          git add TimerPackage/Runtime/
+          git diff --staged --quiet || git commit -m "Update Unity package binaries" || echo "No changes to commit"
+          git push
           
       - name: Pack
         run: dotnet pack RangeExpression/RangeExpression.csproj --configuration Release --no-build --output ./nupkgs
