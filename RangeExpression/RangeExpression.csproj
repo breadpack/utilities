@@ -5,6 +5,9 @@
         <Nullable>enable</Nullable>
         <LangVersion>9.0</LangVersion>
         <RootNamespace>Starter.Utilities</RootNamespace>
+        <AssemblyName>Starter.RangeExpression</AssemblyName>
+        <PackageId>Starter.RangeExpression</PackageId>
+        <Version>1.0.1</Version>
         <Authors>Starter</Authors>
         <Company>Starter</Company>
         <RepositoryUrl>https://github.com/startergames/utilities</RepositoryUrl>
