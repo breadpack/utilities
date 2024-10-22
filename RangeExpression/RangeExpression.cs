@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Starter.Utilities {
+namespace BreadPack.Utilities {
     public class RangeExpression {
         private struct Range {
             private int? start { get; }

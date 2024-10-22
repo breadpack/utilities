@@ -1,0 +1,18 @@
+﻿{
+  "name": "dev.breadpack.utilities",
+  "version": "1.0.0",
+  "displayName": "Utilities",
+  "description": "",
+  "unity": "2021.3",
+  "keywords": [
+    "unity",
+    "package",
+    "range",
+    "expression"
+  ],
+  "author": {
+    "name": "BreadPack",
+    "email": "milennium9@breadpack.dev",
+    "url": "https://github.com/breadpack/utilities"
+  }
+}
