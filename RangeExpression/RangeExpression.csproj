@@ -5,8 +5,8 @@
         <Nullable>enable</Nullable>
         <LangVersion>9.0</LangVersion>
         <RootNamespace>BreadPack.Utilities</RootNamespace>
-        <AssemblyName>BreadPack.RangeExpression</AssemblyName>
-        <PackageId>BreadPack.RangeExpression</PackageId>
+        <AssemblyName>dev.breadpack.RangeExpression</AssemblyName>
+        <PackageId>dev.breadpack.RangeExpression</PackageId>
         <Version>1.0.1</Version>
         <Authors>BreadPack</Authors>
         <Company>BreadPack</Company>
