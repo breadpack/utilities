@@ -39,8 +39,8 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add TimerPackage/package.json
-          git add TimerPackage/Runtime/
+          git add UnityPackage/package.json
+          git add UnityPackage/Runtime/
           git diff --staged --quiet || git commit -m "Update Unity package binaries" || echo "No changes to commit"
           git push
           
