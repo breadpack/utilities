@@ -36,24 +36,20 @@ jobs:
           fi
 
       - name: Restore dependencies
-        run: dotnet restore utilities.sln
+        run: dotnet restore
 
       - name: Build
-        run: |
-          dotnet build RangeExpression/RangeExpression.csproj \
-            --configuration Release \
-            --no-restore \
-            -p:Version=${PACKAGE_VERSION}
+        run: dotnet build --configuration Release
 
       - name: Test
-        run: dotnet test utilities.sln --configuration Release --no-build
+        run: dotnet test --configuration Release
 
       - name: Pack
         run: |
           dotnet pack RangeExpression/RangeExpression.csproj \
             --configuration Release \
-            --no-build \
             -p:Version=${PACKAGE_VERSION} \
+            --no-build \
             --output nupkgs
 
       - name: Push to NuGet
