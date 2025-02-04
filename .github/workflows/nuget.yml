@@ -1,0 +1,51 @@
+name: NuGet Package Deploy
+
+on:
+  push:
+    tags:
+      - 'v*'  # v로 시작하는 태그가 푸시될 때 실행
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0 # 전체 Git 히스토리를 가져옵니다
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.0.x'
+    
+    - name: Set Version from Tag
+      run: |
+        TAG=$(git describe --tags --abbrev=0)
+        VERSION=${TAG#v}
+        echo "PACKAGE_VERSION=$VERSION" >> $GITHUB_ENV
+        
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Build
+      run: |
+        dotnet build --configuration Release --no-restore \
+          -p:Version=${PACKAGE_VERSION} \
+          -p:RepositoryUrl=${{ github.server_url }}/${{ github.repository }}.git \
+          -p:PackageProjectUrl=${{ github.server_url }}/${{ github.repository }}
+      
+    - name: Test
+      run: dotnet test --configuration Release --no-build
+      
+    - name: Pack
+      run: |
+        dotnet pack RangeExpression/RangeExpression.csproj \
+          --configuration Release --no-build \
+          -p:Version=${PACKAGE_VERSION} \
+          -p:RepositoryUrl=${{ github.server_url }}/${{ github.repository }}.git \
+          -p:PackageProjectUrl=${{ github.server_url }}/${{ github.repository }} \
+          --output nupkgs
+      
+    - name: Push to NuGet
+      run: dotnet nuget push nupkgs/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{secrets.NUGET_API_KEY}} --skip-duplicate 
