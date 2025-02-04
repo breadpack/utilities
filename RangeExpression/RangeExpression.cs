@@ -102,17 +102,46 @@ namespace BreadPack.Utilities {
         }
 
         private static Func<string, T> GetDefaultParser() {
-            if (typeof(T) == typeof(int)) return s => (T)(object)int.Parse(s);
-            if (typeof(T) == typeof(long)) return s => (T)(object)long.Parse(s);
-            if (typeof(T) == typeof(double)) return s => (T)(object)double.Parse(s);
-            if (typeof(T) == typeof(float)) return s => (T)(object)float.Parse(s);
-            if (typeof(T) == typeof(DateTime)) return s => (T)(object)DateTime.Parse(s);
-            if (typeof(T) == typeof(TimeSpan)) 
-            {
+            if (typeof(T) == typeof(int)) return s => {
+                try {
+                    return (T)(object)int.Parse(s);
+                } catch (FormatException ex) {
+                    throw new ArgumentException($"Invalid integer format: {s}", ex);
+                }
+            };
+            if (typeof(T) == typeof(long)) return s => {
+                try {
+                    return (T)(object)long.Parse(s);
+                } catch (FormatException ex) {
+                    throw new ArgumentException($"Invalid long format: {s}", ex);
+                }
+            };
+            if (typeof(T) == typeof(double)) return s => {
+                try {
+                    return (T)(object)double.Parse(s);
+                } catch (FormatException ex) {
+                    throw new ArgumentException($"Invalid double format: {s}", ex);
+                }
+            };
+            if (typeof(T) == typeof(float)) return s => {
+                try {
+                    return (T)(object)float.Parse(s);
+                } catch (FormatException ex) {
+                    throw new ArgumentException($"Invalid float format: {s}", ex);
+                }
+            };
+            if (typeof(T) == typeof(DateTime)) return s => {
+                try {
+                    return (T)(object)DateTime.Parse(s);
+                } catch (FormatException ex) {
+                    throw new ArgumentException($"Invalid DateTime format: {s}", ex);
+                }
+            };
+            if (typeof(T) == typeof(TimeSpan)) {
                 return s => {
                     if (TimeSpan.TryParse(s, out TimeSpan result))
                         return (T)(object)result;
-                    throw new FormatException($"Invalid TimeSpan format: {s}");
+                    throw new ArgumentException($"Invalid TimeSpan format: {s}");
                 };
             }
             throw new InvalidOperationException($"No default parser available for type {typeof(T)}");
@@ -121,8 +150,8 @@ namespace BreadPack.Utilities {
         public RangeExpression(string pattern) : this(pattern, null, null) { }
 
         public RangeExpression(string pattern, Func<string, T>? parser = null, Func<T, T>? nextValueFunc = null) {
-            if (string.IsNullOrEmpty(pattern))
-                throw new ArgumentNullException(nameof(pattern));
+            if (string.IsNullOrWhiteSpace(pattern))
+                throw new ArgumentException("Pattern cannot be null or empty.", nameof(pattern));
 
             _pattern = pattern;
             _parser = parser ?? GetDefaultParser();
